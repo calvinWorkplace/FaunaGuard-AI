@@ -1,0 +1,53 @@
+.ResultImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #9BB7A6;
+    padding-bottom: 2rem;
+}
+
+
+.ResultImage form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ResultImage button {
+    font-weight: bolder;
+    font-size: 1rem;
+    background-color: #6A8A77;
+    color: white;
+    padding: 20px 100px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ResultImage button:hover {
+    background-color: #557561;
+}
+
+.ResultImage h1 {
+    color: white;
+    margin-bottom: 0.2rem;
+    font-size: 3rem;
+    margin-top: 0.2rem;
+}
+
+.ResultImage h2 {
+    
+    color: white;
+    font-size: 2rem;
+    margin: 0.2rem;
+    
+}
+
+.ResultImage h3 {
+    font-weight: lighter;
+    color: white;
+    font-size: 1.8rem;
+    margin: 0.2rem;
+}

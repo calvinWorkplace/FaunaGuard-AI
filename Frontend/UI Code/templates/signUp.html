@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signUp.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Validation.js') }}" defer></script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='assets/Logo.png') }}" alt="gambar tidak ada"></a>
+        </div>
+        
+        <div class="navbar-container">
+            <div class="judulLogo">
+                <h1><a href="{{ url_for('home') }}">FaunaGuard</a></h1>
+                <h4>Protecting Wildlife, One Scan at a Time</h4>
+            </div>
+            <ul class="navbar-menu" id="menu">
+                <li class="navbar-item">
+                    <a href="{{ url_for('home') }}" class="navbar-link">Home</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('upload_file') }}" class="navbar-link">Upload</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('login') }}" class="navbar-link">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="image-section-left"></div>
+        <div class="signup-section">
+        <div id="error_message" class="error-message"></div>
+            <form class="signup-form" id="form">
+                <h1>Sign Up</h1>
+                <div class="form-group">
+                    <input type="text" name ="Username" id="Username_input" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="Password"  id="Password_input"  placeholder="Password" required minlength="6" title="Password must be at least 6 characters" required >
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" id="email_input" placeholder="Email" required>
+                </div>
+                
+                <button type="submit" class="signup-button">Sign Up</button>
+
+                <div class="login-link">
+                    <p>Already have an account?</p>
+                    <a href="{{ url_for('login') }}">Login</a>
+                </div>
+            </form>
+        </div>
+        <div class="image-section-right"></div>
+    </div>
+
+</body>
+</html>

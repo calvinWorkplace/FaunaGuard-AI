@@ -1,0 +1,69 @@
+# ── Model (terlalu besar untuk di-push, download terpisah) ──
+models/*.h5
+models/*.keras
+models/*.pkl
+models/saved_model/
+
+# ── Upload folder (konten dinamis, bukan bagian kode) ──
+static/uploads/*
+!static/uploads/.gitkeep
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+
+# ── Virtual environment ──
+venv/
+env/
+.env/
+.venv/
+
+# ── Environment variables ──
+.env
+.env.local
+*.env
+
+# ── Flask / Werkzeug ──
+instance/
+.webassets-cache
+
+# ── Claude Code internal ──
+.claude/
+
+# ── OS generated ──
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Jupyter Notebook checkpoints ──
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Distribution / packaging ──
+dist/
+build/
+*.egg-info/
+*.egg
+
+# ── Logs ──
+*.log
+logs/
+
+# ── Coverage & testing ──
+.coverage
+htmlcov/
+.pytest_cache/

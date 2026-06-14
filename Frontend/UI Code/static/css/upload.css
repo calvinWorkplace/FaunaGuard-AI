@@ -1,0 +1,86 @@
+
+
+.UploadImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #9BB7A6;
+    padding-bottom: 2rem;
+}
+
+.UploadImage h1 {
+    color: white;
+    margin-bottom: 2rem;
+    font-size: 4rem;
+}
+
+.UploadImage form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.UploadImage button {
+    font-size: 1rem;
+    background-color: #6A8A77;
+    color: white;
+    padding: 20px 100px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+
+.UploadImage button:hover {
+    background-color: #557561;
+}
+
+.UploadImage input[type="file"] {
+    display: none;
+}
+
+
+.file-upload {
+    height: 2rem;
+    font-weight: lighter;
+    font-size: 1rem;
+    background-color: #6A8A77;
+    color: white;
+    padding: 8px 100px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+
+.file-upload:hover {
+    background-color: #557561;
+}
+
+.file-upload {
+    height: 2rem;
+    font-weight: lighter;
+    font-size: 1rem;
+    background-color: #6A8A77;
+    color: white;
+    padding: 8px 100px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.file-selected {
+    background-color: #557561;
+}

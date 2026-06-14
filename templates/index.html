@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FaunaGuard AI — Deteksi & Konservasi Hewan Indonesia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: { 50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#052e16' },
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out',
+            'slide-up': 'slideUp 0.6s ease-out',
+            'float': 'float 3s ease-in-out infinite',
+            'bar-fill': 'barFill 1s cubic-bezier(0.4,0,0.6,1) forwards',
+          },
+          keyframes: {
+            fadeIn: { from:{ opacity:'0' }, to:{ opacity:'1' } },
+            slideUp: { from:{ transform:'translateY(24px)', opacity:'0' }, to:{ transform:'translateY(0)', opacity:'1' } },
+            float: { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-8px)' } },
+            barFill: { from:{ width:'0%' }, to:{ width:'var(--target-width)' } },
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* Smooth scroll offset for fixed navbar */
+    html { scroll-padding-top: 72px; }
+
+    /* Gradient text */
+    .text-gradient { background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #86efac 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* Glass card */
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+
+    /* Animated underline */
+    .nav-link { position:relative; }
+    .nav-link::after { content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px; background:#22c55e; transition:width 0.25s ease; }
+    .nav-link:hover::after { width:100%; }
+
+    /* Drop zone */
+    .drop-zone-active { border-color:#16a34a !important; background:rgba(22,163,74,0.08) !important; }
+
+    /* Confidence bar */
+    .bar-fill { transition: width 1.2s cubic-bezier(0.4,0,0.6,1); }
+
+    /* Scroll reveal */
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Animal card hover */
+    .animal-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .animal-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.4); }
+
+    /* Hero particles */
+    .particle { position:absolute; border-radius:50%; opacity:0.12; animation:float var(--dur,4s) ease-in-out infinite; animation-delay:var(--delay,0s); }
+
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out }
+    .animate-slide-up { animation: slideUp 0.5s ease-out }
+
+    /* Step connector line */
+    .step-line::before { content:''; position:absolute; top:24px; left:calc(50% + 24px); width:calc(100% - 48px); height:2px; background:linear-gradient(90deg,#166534,#14532d); }
+  </style>
+</head>
+<body class="bg-slate-950 text-white font-sans antialiased">
+
+  <!-- ══════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-slate-950/80 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-forest-600 flex items-center justify-center text-base">🐾</div>
+        <span class="text-lg font-bold tracking-tight">Fauna<span class="text-forest-400">Guard</span><span class="text-xs font-normal text-slate-500 ml-1">AI</span></span>
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-8 text-sm text-slate-400">
+        <a href="#tentang" class="nav-link hover:text-white transition-colors">Tentang</a>
+        <a href="#fitur" class="nav-link hover:text-white transition-colors">Fitur</a>
+        <a href="#hewan" class="nav-link hover:text-white transition-colors">Hewan</a>
+        <a href="#cara-kerja" class="nav-link hover:text-white transition-colors">Cara Kerja</a>
+        <a href="#prediksi" class="bg-forest-600 hover:bg-forest-500 text-white px-4 py-2 rounded-full text-xs font-semibold transition-colors">
+          Coba Sekarang →
+        </a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button id="menuBtn" class="md:hidden text-slate-400 hover:text-white p-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-white/5 bg-slate-950 px-4 py-4 space-y-3 text-sm text-slate-400">
+      <a href="#tentang" class="block hover:text-white" onclick="closeMobileMenu()">Tentang</a>
+      <a href="#fitur" class="block hover:text-white" onclick="closeMobileMenu()">Fitur</a>
+      <a href="#hewan" class="block hover:text-white" onclick="closeMobileMenu()">Hewan</a>
+      <a href="#cara-kerja" class="block hover:text-white" onclick="closeMobileMenu()">Cara Kerja</a>
+      <a href="#prediksi" class="block text-forest-400 font-semibold" onclick="closeMobileMenu()">Coba Sekarang →</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════════ -->
+  <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center px-4 text-center overflow-hidden">
+    <!-- Background decorations -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="particle w-72 h-72 bg-forest-500 -top-20 -left-20" style="--dur:5s;--delay:0s"></div>
+      <div class="particle w-48 h-48 bg-emerald-400 top-1/3 -right-12" style="--dur:4s;--delay:1s"></div>
+      <div class="particle w-32 h-32 bg-forest-300 bottom-1/4 left-1/4" style="--dur:6s;--delay:2s"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/60 to-slate-950"></div>
+      <!-- Grid overlay -->
+      <div class="absolute inset-0" style="background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:64px 64px"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 glass text-forest-400 text-xs font-medium px-4 py-2 rounded-full mb-8">
+        <span class="w-1.5 h-1.5 rounded-full bg-forest-400 animate-pulse"></span>
+        Model AI InceptionV3 · Akurasi 96.15% · 21 Kelas Hewan
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6">
+        Lindungi Hewan<br />
+        <span class="text-gradient">Sebelum Terlambat</span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="max-w-2xl mx-auto text-slate-400 text-lg sm:text-xl leading-relaxed mb-10">
+        FaunaGuard AI menggunakan kecerdasan buatan untuk mengidentifikasi hewan dari foto dan mendeteksi apakah spesies tersebut
+        terancam punah — sebagai langkah nyata dalam upaya <strong class="text-white">konservasi satwa liar Indonesia</strong>.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#prediksi"
+           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-forest-600 hover:bg-forest-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-200 shadow-lg shadow-forest-900/50 hover:shadow-forest-800/60 hover:-translate-y-0.5">
+          🔍 Analisa Gambar Hewan
+        </a>
+        <a href="#tentang"
+           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 glass hover:bg-white/8 text-white font-medium px-8 py-4 rounded-2xl transition-all duration-200 hover:-translate-y-0.5">
+          Pelajari Lebih Lanjut ↓
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="mt-16 grid grid-cols-3 gap-6 max-w-lg mx-auto">
+        <div class="text-center">
+          <div class="text-3xl font-black text-forest-400">21</div>
+          <div class="text-slate-500 text-xs mt-1">Kelas Hewan</div>
+        </div>
+        <div class="text-center border-x border-white/5">
+          <div class="text-3xl font-black text-forest-400">96%</div>
+          <div class="text-slate-500 text-xs mt-1">Akurasi Validasi</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-forest-400">2K+</div>
+          <div class="text-slate-500 text-xs mt-1">Gambar Latih</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-slate-600">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       TENTANG
+  ══════════════════════════════════════════════ -->
+  <section id="tentang" class="py-24 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Text -->
+        <div class="reveal">
+          <span class="text-forest-500 text-xs font-semibold uppercase tracking-widest">Tentang FaunaGuard</span>
+          <h2 class="text-3xl sm:text-4xl font-bold mt-3 mb-6 leading-tight">
+            Teknologi AI untuk<br /><span class="text-gradient">Masa Depan Satwa Liar</span>
+          </h2>
+          <p class="text-slate-400 leading-relaxed mb-5">
+            FaunaGuard AI adalah platform berbasis kecerdasan buatan yang dirancang untuk membantu siapa saja — mulai dari
+            pelajar, peneliti, hingga pencinta alam — dalam mengidentifikasi spesies hewan secara instan hanya dari sebuah foto.
+          </p>
+          <p class="text-slate-400 leading-relaxed mb-8">
+            Dibangun menggunakan arsitektur <strong class="text-white">InceptionV3</strong> dengan teknik transfer learning,
+            model kami dilatih pada lebih dari 2.000 gambar hewan yang mencakup 21 spesies, termasuk 12 spesies yang
+            berstatus <strong class="text-red-400">langka dan terancam punah</strong> di Indonesia.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="glass rounded-xl p-4 flex-1">
+              <div class="text-2xl mb-1">🎯</div>
+              <div class="text-white font-semibold text-sm">Akurasi Tinggi</div>
+              <div class="text-slate-500 text-xs mt-1">96.15% akurasi pada data validasi</div>
+            </div>
+            <div class="glass rounded-xl p-4 flex-1">
+              <div class="text-2xl mb-1">⚡</div>
+              <div class="text-white font-semibold text-sm">Analisa Cepat</div>
+              <div class="text-slate-500 text-xs mt-1">Hasil prediksi dalam hitungan detik</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual card -->
+        <div class="reveal">
+          <div class="glass rounded-3xl p-6 space-y-4">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl bg-forest-600/30 flex items-center justify-center text-xl">🌿</div>
+              <div>
+                <div class="text-white font-semibold text-sm">Mengapa Konservasi Penting?</div>
+                <div class="text-slate-500 text-xs">Data IUCN Red List 2023</div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-400">Spesies terancam punah global</span>
+                <span class="text-red-400 font-semibold">44.016+</span>
+              </div>
+              <div class="h-2 bg-slate-800 rounded-full"><div class="h-full w-4/5 bg-red-500 rounded-full"></div></div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-400">Hewan endemik Indonesia terancam</span>
+                <span class="text-orange-400 font-semibold">1.200+</span>
+              </div>
+              <div class="h-2 bg-slate-800 rounded-full"><div class="h-full w-3/5 bg-orange-500 rounded-full"></div></div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-400">Spesies punah per hari (est.)</span>
+                <span class="text-yellow-400 font-semibold">~150</span>
+              </div>
+              <div class="h-2 bg-slate-800 rounded-full"><div class="h-full w-2/5 bg-yellow-500 rounded-full"></div></div>
+            </div>
+            <p class="text-slate-500 text-xs pt-2">Deteksi dini adalah kunci — kenali spesies sebelum terlambat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       FITUR
+  ══════════════════════════════════════════════ -->
+  <section id="fitur" class="py-24 px-4 bg-gradient-to-b from-slate-950 to-slate-900">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-forest-500 text-xs font-semibold uppercase tracking-widest">Fitur Utama</span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">Apa yang Bisa FaunaGuard Lakukan?</h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Platform lengkap untuk identifikasi dan pemantauan status konservasi satwa liar secara instan.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature cards -->
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-forest-600/20 border border-forest-500/20 flex items-center justify-center text-2xl mb-4">📸</div>
+          <h3 class="text-white font-semibold mb-2">Identifikasi dari Foto</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Upload foto hewan apapun — dari kamera, galeri, atau hasil screenshot — dan AI kami akan mengidentifikasi spesiesnya secara instan.</p>
+        </div>
+
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-red-600/20 border border-red-500/20 flex items-center justify-center text-2xl mb-4">🚨</div>
+          <h3 class="text-white font-semibold mb-2">Status Konservasi</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Setiap prediksi dilengkapi status konservasi — apakah hewan tersebut termasuk spesies <span class="text-red-400">Langka</span> atau <span class="text-forest-400">Normal</span>.</p>
+        </div>
+
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/20 flex items-center justify-center text-2xl mb-4">📊</div>
+          <h3 class="text-white font-semibold mb-2">Skor Keyakinan AI</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Lihat seberapa yakin model terhadap prediksinya, beserta 3 kandidat teratas untuk transparansi hasil analisa.</p>
+        </div>
+
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-purple-600/20 border border-purple-500/20 flex items-center justify-center text-2xl mb-4">🧠</div>
+          <h3 class="text-white font-semibold mb-2">Deep Learning Modern</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Ditenagai InceptionV3 dengan transfer learning dari ImageNet, dioptimalkan khusus untuk dataset fauna Indonesia dan Asia.</p>
+        </div>
+
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-yellow-600/20 border border-yellow-500/20 flex items-center justify-center text-2xl mb-4">📱</div>
+          <h3 class="text-white font-semibold mb-2">Responsif di Semua Device</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Tampil sempurna di desktop, tablet, maupun smartphone. Bisa diakses kapan saja dan di mana saja tanpa install aplikasi.</p>
+        </div>
+
+        <div class="glass rounded-2xl p-6 reveal animal-card">
+          <div class="w-12 h-12 rounded-xl bg-teal-600/20 border border-teal-500/20 flex items-center justify-center text-2xl mb-4">🔒</div>
+          <h3 class="text-white font-semibold mb-2">Privasi Terjaga</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Gambar yang diunggah diproses secara lokal oleh server dan tidak disimpan secara permanen. Privasi Anda adalah prioritas kami.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       DAFTAR HEWAN
+  ══════════════════════════════════════════════ -->
+  <section id="hewan" class="py-24 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-forest-500 text-xs font-semibold uppercase tracking-widest">Database Spesies</span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">21 Spesies yang Dapat Dikenali</h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Dari satwa langka khas Indonesia hingga hewan umum — model kami mampu membedakan keduanya dengan akurasi tinggi.</p>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="flex justify-center gap-3 mb-10 reveal">
+        <button onclick="filterAnimals('all')" id="filter-all" class="filter-btn px-5 py-2 rounded-full text-sm font-medium bg-forest-600 text-white transition-colors">Semua</button>
+        <button onclick="filterAnimals('langka')" id="filter-langka" class="filter-btn px-5 py-2 rounded-full text-sm font-medium glass text-slate-400 hover:text-white transition-colors">🔴 Langka</button>
+        <button onclick="filterAnimals('normal')" id="filter-normal" class="filter-btn px-5 py-2 rounded-full text-sm font-medium glass text-slate-400 hover:text-white transition-colors">🟢 Normal</button>
+      </div>
+
+      <!-- Animal grid -->
+      <div id="animalGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+        <!-- JS will render these -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       CARA KERJA
+  ══════════════════════════════════════════════ -->
+  <section id="cara-kerja" class="py-24 px-4 bg-gradient-to-b from-slate-950 to-slate-900">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-forest-500 text-xs font-semibold uppercase tracking-widest">Cara Kerja</span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">Analisa dalam 3 Langkah Mudah</h2>
+        <p class="text-slate-400 mt-4 max-w-lg mx-auto">Tidak perlu keahlian teknis. Cukup foto, upload, dan dapatkan hasil analisa AI dalam hitungan detik.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-8">
+        <div class="text-center reveal">
+          <div class="w-16 h-16 rounded-2xl bg-forest-600/20 border border-forest-500/30 flex items-center justify-center text-3xl mx-auto mb-5 animate-float" style="animation-delay:0s">📷</div>
+          <div class="text-forest-500 text-xs font-bold uppercase tracking-widest mb-2">Langkah 1</div>
+          <h3 class="text-white font-semibold mb-2">Ambil atau Pilih Foto</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Foto hewan dari kamera, galeri, atau internet. Format PNG, JPG, dan WEBP didukung hingga 10 MB.</p>
+        </div>
+
+        <div class="text-center reveal">
+          <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-3xl mx-auto mb-5 animate-float" style="animation-delay:0.3s">⬆️</div>
+          <div class="text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">Langkah 2</div>
+          <h3 class="text-white font-semibold mb-2">Upload & Analisa</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Drag & drop atau klik untuk memilih file. Tekan tombol Analisa dan biarkan AI bekerja.</p>
+        </div>
+
+        <div class="text-center reveal">
+          <div class="w-16 h-16 rounded-2xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-3xl mx-auto mb-5 animate-float" style="animation-delay:0.6s">✅</div>
+          <div class="text-purple-400 text-xs font-bold uppercase tracking-widest mb-2">Langkah 3</div>
+          <h3 class="text-white font-semibold mb-2">Lihat Hasil Lengkap</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Dapatkan nama spesies, status konservasi, tingkat keyakinan AI, dan 3 kandidat prediksi teratas.</p>
+        </div>
+      </div>
+
+      <!-- Tech stack note -->
+      <div class="mt-16 glass rounded-2xl p-6 text-center reveal">
+        <p class="text-slate-400 text-sm mb-4">Didukung oleh teknologi</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <span class="glass px-4 py-2 rounded-full text-xs text-slate-300">🧠 TensorFlow / Keras</span>
+          <span class="glass px-4 py-2 rounded-full text-xs text-slate-300">⚡ InceptionV3</span>
+          <span class="glass px-4 py-2 rounded-full text-xs text-slate-300">🐍 Python / Flask</span>
+          <span class="glass px-4 py-2 rounded-full text-xs text-slate-300">🖼️ Pillow (PIL)</span>
+          <span class="glass px-4 py-2 rounded-full text-xs text-slate-300">🎨 TailwindCSS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SECTION PREDIKSI
+  ══════════════════════════════════════════════ -->
+  <section id="prediksi" class="py-24 px-4">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-10 reveal">
+        <span class="text-forest-500 text-xs font-semibold uppercase tracking-widest">Coba Sekarang</span>
+        <h2 class="text-3xl sm:text-4xl font-bold mt-3">Analisa Gambar Hewan</h2>
+        <p class="text-slate-400 mt-3">Upload foto hewan dan biarkan AI kami mengidentifikasinya.</p>
+      </div>
+
+      <div class="glass rounded-3xl p-6 sm:p-8 shadow-2xl reveal">
+
+        <!-- Upload Section -->
+        <div id="uploadSection">
+          <label for="fileInput" id="dropZone"
+                 class="flex flex-col items-center justify-center gap-4 border-2 border-dashed border-slate-700 rounded-2xl p-10 cursor-pointer hover:border-forest-500 hover:bg-forest-950/20 transition-all duration-200">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-3xl">🐾</div>
+            <div class="text-center">
+              <p class="text-white font-semibold">Seret &amp; Letakkan gambar di sini</p>
+              <p class="text-slate-400 text-sm mt-1">atau <span class="text-forest-400 underline underline-offset-2">klik untuk memilih file</span></p>
+              <p class="text-slate-600 text-xs mt-2">PNG, JPG, JPEG, WEBP · Maks. 10 MB</p>
+            </div>
+            <input id="fileInput" type="file" class="hidden" accept="image/*" />
+          </label>
+
+          <!-- Preview -->
+          <div id="previewBox" class="hidden mt-5">
+            <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-white/10">
+              <img id="previewImg" src="" alt="Preview" class="w-full max-h-72 object-contain" />
+              <button id="removeBtn"
+                      class="absolute top-3 right-3 bg-slate-900/80 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm transition-colors">✕</button>
+            </div>
+            <p id="previewName" class="text-slate-500 text-xs mt-2 truncate px-1"></p>
+          </div>
+
+          <button id="analyseBtn"
+                  class="mt-5 w-full py-3.5 rounded-xl font-semibold text-base bg-forest-600 hover:bg-forest-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+                  disabled>
+            🔍 Analisa Sekarang
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingSection" class="hidden text-center py-12">
+          <div class="relative w-20 h-20 mx-auto mb-6">
+            <div class="absolute inset-0 border-4 border-forest-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-3 border-4 border-emerald-300/40 border-b-transparent rounded-full animate-spin" style="animation-direction:reverse;animation-duration:1.5s"></div>
+          </div>
+          <p class="text-white font-semibold text-lg">Sedang menganalisa…</p>
+          <p class="text-slate-400 text-sm mt-1 animate-pulse">Model AI sedang memproses gambar</p>
+        </div>
+
+        <!-- Result -->
+        <div id="resultSection" class="hidden animate-slide-up">
+          <div class="rounded-2xl overflow-hidden bg-slate-900 border border-white/10 mb-6">
+            <img id="resultImg" src="" alt="Hasil" class="w-full max-h-56 object-contain" />
+          </div>
+
+          <div id="statusBadge" class="flex items-center justify-center gap-2 mb-5">
+            <span id="statusIcon" class="text-2xl"></span>
+            <span id="statusText" class="text-base font-bold px-4 py-1.5 rounded-full"></span>
+          </div>
+
+          <div class="text-center mb-6">
+            <p class="text-slate-400 text-sm uppercase tracking-widest mb-1">Hewan Teridentifikasi</p>
+            <h3 id="animalLabel" class="text-3xl font-extrabold"></h3>
+          </div>
+
+          <div class="bg-slate-900/60 rounded-2xl p-5 mb-4 border border-white/5">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-slate-400 text-sm">Tingkat Keyakinan AI</span>
+              <span id="confidencePct" class="text-white font-bold text-lg"></span>
+            </div>
+            <div class="h-3 bg-slate-700 rounded-full overflow-hidden">
+              <div id="confidenceBar" class="h-full rounded-full bar-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <button id="resetBtn"
+                  class="mt-6 w-full py-3.5 rounded-xl font-semibold text-base bg-slate-700 hover:bg-slate-600 transition-all duration-200">
+            ↩ Upload Gambar Lain
+          </button>
+        </div>
+
+        <!-- Error -->
+        <div id="errorSection" class="hidden text-center py-8">
+          <div class="text-5xl mb-4">⚠️</div>
+          <p class="text-red-400 font-semibold text-lg" id="errorMsg">Terjadi kesalahan.</p>
+          <button id="errorResetBtn"
+                  class="mt-5 px-6 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-sm font-medium transition-colors">Coba Lagi</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════ -->
+  <footer class="border-t border-white/5 bg-slate-950 py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid sm:grid-cols-3 gap-8 mb-10">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-forest-600 flex items-center justify-center text-base">🐾</div>
+            <span class="text-lg font-bold">Fauna<span class="text-forest-400">Guard</span></span>
+          </div>
+          <p class="text-slate-500 text-sm leading-relaxed">Platform AI untuk identifikasi dan pemantauan status konservasi satwa liar Indonesia.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold text-sm mb-4">Navigasi</h4>
+          <div class="space-y-2 text-slate-500 text-sm">
+            <a href="#tentang" class="block hover:text-forest-400 transition-colors">Tentang</a>
+            <a href="#fitur" class="block hover:text-forest-400 transition-colors">Fitur</a>
+            <a href="#hewan" class="block hover:text-forest-400 transition-colors">Database Hewan</a>
+            <a href="#cara-kerja" class="block hover:text-forest-400 transition-colors">Cara Kerja</a>
+            <a href="#prediksi" class="block hover:text-forest-400 transition-colors">Coba Sekarang</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold text-sm mb-4">Teknologi</h4>
+          <div class="space-y-2 text-slate-500 text-sm">
+            <p>InceptionV3 (Transfer Learning)</p>
+            <p>TensorFlow 2.x / Keras</p>
+            <p>Flask · Python 3.x</p>
+            <p>Akurasi Validasi: <span class="text-forest-400 font-medium">96.15%</span></p>
+            <p>Dataset: <span class="text-slate-400">2.087 gambar · 21 kelas</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-slate-600 text-xs">
+        <p>© 2024 FaunaGuard AI. Dibuat untuk keperluan edukasi & konservasi.</p>
+        <p>Model: InceptionV3 · 96.15% val accuracy · 21 kelas hewan</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  <script>
+    // ── Mobile menu ──
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    function closeMobileMenu() { mobileMenu.classList.add('hidden'); }
+
+    // ── Scroll reveal ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── Animal grid ──
+    const ANIMALS = [
+      { name:'Anjing', emoji:'🐕', status:'Normal' },
+      { name:'Badak', emoji:'🦏', status:'Langka' },
+      { name:'Bekantan', emoji:'🐒', status:'Langka' },
+      { name:'Beruang Madu', emoji:'🐻', status:'Langka' },
+      { name:'Rangkong Badak', emoji:'🦅', status:'Langka' },
+      { name:'Cendrawasih', emoji:'🦜', status:'Langka' },
+      { name:'Domba', emoji:'🐑', status:'Normal' },
+      { name:'Elang Jawa', emoji:'🦅', status:'Langka' },
+      { name:'Gajah Asia', emoji:'🐘', status:'Langka' },
+      { name:'Kakaktua Putih', emoji:'🦜', status:'Langka' },
+      { name:'Kakaktua Raja', emoji:'🦜', status:'Langka' },
+      { name:'Kerbau', emoji:'🐃', status:'Normal' },
+      { name:'Kucing', emoji:'🐱', status:'Normal' },
+      { name:'Kuda', emoji:'🐴', status:'Normal' },
+      { name:'Kupu-kupu', emoji:'🦋', status:'Normal' },
+      { name:'Macan Tutul', emoji:'🐆', status:'Langka' },
+      { name:'Orang Utan', emoji:'🦧', status:'Langka' },
+      { name:'Singa', emoji:'🦁', status:'Normal' },
+      { name:'Tapir', emoji:'🦏', status:'Langka' },
+      { name:'Ular', emoji:'🐍', status:'Normal' },
+      { name:'Zebra', emoji:'🦓', status:'Normal' },
+    ];
+
+    let currentFilter = 'all';
+
+    function filterAnimals(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-forest-600', 'text-white');
+        btn.classList.add('glass', 'text-slate-400');
+      });
+      const active = document.getElementById(`filter-${filter}`);
+      active.classList.add('bg-forest-600', 'text-white');
+      active.classList.remove('glass', 'text-slate-400');
+      renderAnimals();
+    }
+
+    function renderAnimals() {
+      const grid = document.getElementById('animalGrid');
+      const filtered = currentFilter === 'all' ? ANIMALS : ANIMALS.filter(a => a.status.toLowerCase() === currentFilter);
+      grid.innerHTML = filtered.map(a => {
+        const isLangka = a.status === 'Langka';
+        const badgeBg  = isLangka ? 'rgba(153,27,27,0.35)'  : 'rgba(20,83,45,0.45)';
+        const badgeClr = isLangka ? '#f87171' : '#4ade80';
+        return `
+        <div class="glass rounded-xl p-4 text-center animal-card cursor-default">
+          <div style="font-size:2rem;margin-bottom:8px">${a.emoji}</div>
+          <div style="color:#fff;font-size:0.75rem;font-weight:500;line-height:1.3">${a.name}</div>
+          <div style="margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;font-size:0.7rem;font-weight:500;background:${badgeBg};color:${badgeClr}">
+            <span style="width:6px;height:6px;border-radius:50%;background:${badgeClr};flex-shrink:0"></span>
+            ${a.status}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    renderAnimals();
+  </script>
+</body>
+</html>

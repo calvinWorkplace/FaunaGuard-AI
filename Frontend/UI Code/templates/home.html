@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='assets/Logo.png') }}" alt="gambar tidak ada"></a>
+        </div>
+        
+        <div class="navbar-container">
+            <div class="judulLogo">
+                <h1><a href="{{ url_for('home') }}">FaunaGuard</a></h1>
+                <h4>Protecting Wildlife, One Scan at a Time</h4>
+            </div>
+            <ul class="navbar-menu" id="menu">
+                <li class="navbar-item">
+                    <a href="{{ url_for('home') }}" class="navbar-link">Home</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('upload_file') }}" class="navbar-link">Upload</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{{ url_for('login') }}" class="navbar-link">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="background-container">
+        <img src="{{ url_for('static', filename='assets/rhinoBG.png') }}" alt="Rhino Background">
+    </div>
+    <div class="main-title">
+        <h1>Animal and Wildlife<br>Detection</h1>
+    </div>
+    <div class="info-section">
+        <div class="info-content">
+            <h2>What is animal detection using AI</h2>
+            <p>Animal detection is a way to detect and identify
+                animals and wildlife species. With the help of AI,
+                animals can be identified with striking accuracy.
+                This is crucial for monitoring animals in the wild.</p>
+        </div>
+        <a href="{{ url_for('upload_file') }}" class="get-started-btn">GET STARTED</a>
+    </div>
+        
+    
+    
+</body>
+</html>
