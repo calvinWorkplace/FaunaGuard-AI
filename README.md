@@ -84,6 +84,27 @@
 
 <br />
 
+<p align="center"><b>— Alur Prediksi —</b></p>
+
+<table align="center">
+  <tr>
+    <td align="center" width="33%">
+      <img src="assets/image6.jpg" alt="Upload Zone" width="220" /><br />
+      <b>1️⃣ Upload Gambar</b>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/image7.jpg" alt="Preview Gambar" width="220" /><br />
+      <b>2️⃣ Preview &amp; Analisa</b>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/image8.jpg" alt="Hasil Prediksi" width="220" /><br />
+      <b>3️⃣ Hasil Prediksi AI</b>
+    </td>
+  </tr>
+</table>
+
+<br />
+
 ---
 
 <!-- ══════════════════════════════════════════════════════════
