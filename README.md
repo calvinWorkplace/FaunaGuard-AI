@@ -3,7 +3,7 @@
 ══════════════════════════════════════════════════════════ -->
 
 <p align="center">
-  <img src="assets/image1.jpg" alt="FaunaGuard AI Banner" width="100%" />
+  <img src="assets/image1.jpg" alt="FaunaGuard AI — Hero Section" width="100%" />
 </p>
 
 <br />
@@ -61,21 +61,23 @@
 
 <table align="center">
   <tr>
-    <td align="center" width="25%">
-      <img src="assets/image1.jpg" alt="Homepage" width="180" /><br />
-      <b>🏠 Homepage</b>
+    <td align="center" width="33%">
+      <img src="assets/image2.jpg" alt="Tentang" width="220" /><br />
+      <b>🌿 Tentang &amp; Konservasi</b>
     </td>
-    <td align="center" width="25%">
-      <img src="assets/image2.jpg" alt="Upload" width="180" /><br />
-      <b>📤 Upload Gambar</b>
+    <td align="center" width="33%">
+      <img src="assets/image3.jpg" alt="Fitur" width="220" /><br />
+      <b>✨ Fitur Utama</b>
     </td>
-    <td align="center" width="25%">
-      <img src="assets/image3.jpg" alt="Hasil" width="180" /><br />
-      <b>📊 Hasil Analisa</b>
+    <td align="center" width="33%">
+      <img src="assets/image4.jpg" alt="Database Hewan" width="220" /><br />
+      <b>🦁 Database 21 Spesies</b>
     </td>
-    <td align="center" width="25%">
-      <img src="assets/image4.jpg" alt="Login" width="180" /><br />
-      <b>🔐 Login</b>
+  </tr>
+  <tr>
+    <td align="center" colspan="3">
+      <img src="assets/image5.jpg" alt="Cara Kerja" width="680" /><br />
+      <b>🔄 Cara Kerja &amp; Tech Stack</b>
     </td>
   </tr>
 </table>
